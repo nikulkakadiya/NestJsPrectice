@@ -1,4 +1,17 @@
-import { Controller, Delete, Get, Param, Post, Put } from '@nestjs/common';
+import {
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  Req,
+  Res,
+  UseInterceptors,
+} from '@nestjs/common';
+
+import { Request, Response } from 'express';
+import { AppInterceptor } from './app.interceptor';
 import { BookService } from './book.service';
 
 @Controller('book')
@@ -10,8 +23,9 @@ export class BookController {
   // add book
 
   @Post('/add')
-  addBook(): String {
-    return this.bookService.addBook();
+  @UseInterceptors(new AppInterceptor())
+  addBook(@Req() req: Request, @Res() res: Response): any {
+    return res.json(req.body);
   }
 
   //delete book
